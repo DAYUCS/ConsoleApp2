@@ -10,12 +10,12 @@ namespace ConsoleApp2
     class Program
     {
         private static readonly string code = @"using System;
+                            using ConsoleApp2;
                             public class Script1
                             {
-                                public static int Sum(int a, int b)
+                                public static void Any(EximMarco eximMarco)
                                 {
-                                    dynamic d = a + 1;
-                                    return d + b;
+                                    eximMarco.Increase();
                                 }
                             }";
 
@@ -30,9 +30,11 @@ namespace ConsoleApp2
                     syntaxTrees: new[] { tree },
                     references: new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
                                         MetadataReference.CreateFromFile(typeof(ExpandoObject).Assembly.Location),
-                                        MetadataReference.CreateFromFile(typeof(Microsoft.CSharp.RuntimeBinder.Binder).Assembly.Location)});
+                                        MetadataReference.CreateFromFile(typeof(Microsoft.CSharp.RuntimeBinder.Binder).Assembly.Location),
+                                        MetadataReference.CreateFromFile(typeof(EximMarco).Assembly.Location)});
 
                 var emitResult = compilation.Emit("EximScript1.dll", "EximScript1.pdb");
+                Console.WriteLine("Compiled.");
             }
             Assembly compiledAssembly;
             /*
@@ -47,11 +49,30 @@ namespace ConsoleApp2
                 compiledAssembly = Assembly.LoadFrom("EximScript1.dll");
                 Type calculator = compiledAssembly.GetType("Script1");
                 object instance = Activator.CreateInstance(calculator);
-                int result = (int)calculator.
-                    InvokeMember("Sum", BindingFlags.InvokeMethod, null, instance, new object[] { 1, 1 });
-                Console.WriteLine("Step:{0} -- Result: {0}", i, result); 
+                EximMarco eximMarco = new EximMarco(i);
+                calculator.InvokeMember("Any", BindingFlags.InvokeMethod, null, instance, new object[] { eximMarco });
+                Console.WriteLine("Step:{0} -- Result: {1}", i, eximMarco.Count); 
             }
             Console.ReadKey();
+        }
+    }
+
+    public class EximMarco
+    {
+        public EximMarco()
+        {
+            Count = 0;
+        }
+
+        public EximMarco(int i)
+        {
+            Count = i;
+        }
+        public int Count { get; set; }
+
+        public void Increase()
+        {
+            Count++;
         }
     }
 }
