@@ -106,6 +106,7 @@ D:\projects\ConsoleApp2\bin\Debug\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
 D:\projects\ConsoleApp2\bin\Debug\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
 D:\projects\ConsoleApp2\bin\Debug\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
 D:\projects\ConsoleApp2\bin\Debug\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\projects\ConsoleApp2\obj\Debug\ConsoleApp2.csprojAssemblyReference.cache
 D:\projects\ConsoleApp2\obj\Debug\ConsoleApp2.GeneratedMSBuildEditorConfig.editorconfig
 D:\projects\ConsoleApp2\obj\Debug\ConsoleApp2.csproj.CoreCompileInputs.cache
 D:\projects\ConsoleApp2\obj\Debug\ConsoleApp2.csproj.CopyComplete

@@ -24,7 +24,7 @@ namespace ConsoleApp2
 
         static void Main(string[] args)
         {
-            if (!File.Exists("EximScript1.dll")) {
+            if (Type.GetType("Eximbills.Script1, EximScript1, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null") == null) {
                 Console.WriteLine("Compile Script into dll...");
                 var tree = SyntaxFactory.ParseSyntaxTree(code);
                 var compilation = CSharpCompilation.Create(
@@ -36,21 +36,28 @@ namespace ConsoleApp2
                                         MetadataReference.CreateFromFile(typeof(Microsoft.CSharp.RuntimeBinder.Binder).Assembly.Location),
                                         MetadataReference.CreateFromFile(typeof(EximMarco).Assembly.Location)});
 
+                //Generate dll and pdb
                 var emitResult = compilation.Emit("EximScript1.dll", "EximScript1.pdb");
                 Console.WriteLine("Compiled.");
-            }
-            Assembly compiledAssembly;
-            /*
-            using (var stream = new MemoryStream())
-            {
-                var compileResult = compilation.Emit(stream);
-                compiledAssembly = Assembly.Load(stream.GetBuffer());
-            }
-            */
 
-            for (int i = 0; i < 1000000; i++) { 
-                compiledAssembly = Assembly.LoadFrom("EximScript1.dll");
-                Type calculator = compiledAssembly.GetType("Eximbills.Script1");
+                //Generate Assembly and get type's Assembly Qualified Name
+                using (var stream = new MemoryStream())
+                {
+                    var compileResult = compilation.Emit(stream);
+                    Assembly compiledAssembly = Assembly.Load(stream.GetBuffer());
+                    Type calculator = compiledAssembly.GetType("Eximbills.Script1");
+                    Console.WriteLine($"Assembly Qualified Name: {calculator.AssemblyQualifiedName}");
+                }
+            }
+
+            for (int i = 0; i < 1000000; i++) {
+                Type calculator = Type.GetType("Eximbills.Script1, EximScript1, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
+                if (calculator == null)
+                {
+                    Console.WriteLine("Load assembly from dll...");
+                    Assembly compiledAssembly = Assembly.LoadFrom("EximScript1.dll");
+                    calculator = compiledAssembly.GetType("Eximbills.Script1");
+                }
                 object instance = Activator.CreateInstance(calculator);
                 EximMarco eximMarco = new EximMarco(i);
                 calculator.InvokeMember("Any", BindingFlags.InvokeMethod, null, instance, new object[] { eximMarco });
