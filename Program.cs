@@ -11,11 +11,14 @@ namespace ConsoleApp2
     {
         private static readonly string code = @"using System;
                             using ConsoleApp2;
-                            public class Script1
+                            namespace Eximbills
                             {
-                                public static void Any(EximMarco eximMarco)
+                                public class Script1
                                 {
-                                    eximMarco.Increase();
+                                    public static void Any(EximMarco eximMarco)
+                                    {
+                                        eximMarco.Increase();
+                                    }
                                 }
                             }";
 
@@ -47,7 +50,7 @@ namespace ConsoleApp2
 
             for (int i = 0; i < 1000000; i++) { 
                 compiledAssembly = Assembly.LoadFrom("EximScript1.dll");
-                Type calculator = compiledAssembly.GetType("Script1");
+                Type calculator = compiledAssembly.GetType("Eximbills.Script1");
                 object instance = Activator.CreateInstance(calculator);
                 EximMarco eximMarco = new EximMarco(i);
                 calculator.InvokeMember("Any", BindingFlags.InvokeMethod, null, instance, new object[] { eximMarco });
