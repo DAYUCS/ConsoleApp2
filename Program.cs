@@ -37,7 +37,7 @@ namespace ConsoleApp2
                                         MetadataReference.CreateFromFile(typeof(EximMarco).Assembly.Location)});
 
                 //Generate dll and pdb
-                var emitResult = compilation.Emit("EximScript1.dll", "EximScript1.pdb");
+                var emitResult = compilation.Emit("dlls\\EximScript1.dll");
                 Console.WriteLine("Compiled.");
 
                 //Generate Assembly and get type's Assembly Qualified Name
@@ -50,12 +50,12 @@ namespace ConsoleApp2
                 }
             }
 
-            for (int i = 0; i < 1000000; i++) {
+            for (int i = 0; i < 10; i++) {
                 Type calculator = Type.GetType("Eximbills.Script1, EximScript1, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
                 if (calculator == null)
                 {
                     Console.WriteLine("Load assembly from dll...");
-                    Assembly compiledAssembly = Assembly.LoadFrom("EximScript1.dll");
+                    Assembly compiledAssembly = Assembly.LoadFrom("dlls\\EximScript1.dll");
                     calculator = compiledAssembly.GetType("Eximbills.Script1");
                 }
                 object instance = Activator.CreateInstance(calculator);
